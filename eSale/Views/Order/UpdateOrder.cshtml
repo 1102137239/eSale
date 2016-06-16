@@ -35,7 +35,7 @@
         <tr>
             <td>@Html.LabelFor(model => model.Orderdate)</td>
             <td>
-                @Html.TextBoxFor(model => model.Orderdate, new { @type = "datetime-local" })
+                @Html.TextBoxFor(model => model.Orderdate, new { @type = "datetime-local", @Value = (Model.Orderdate.ToString().IndexOf("下") == -1) ? (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[0] + "-" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[1].PadLeft(2, '0') + "-" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[2].PadLeft(2, '0') + "T" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[1] : (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[0] + "-" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[1].PadLeft(2, '0') + "-" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[0].Split('/')[2].PadLeft(2, '0') + "T" + (Model.Orderdate.ToString()).Replace(" 上午 ", "T").Split('T')[1] })
                 @Html.ValidationMessageFor(model => model.Orderdate)
             </td>
             <td>@Html.LabelFor(model => model.RequireDdate)</td>
@@ -50,7 +50,7 @@
         <tr>
             <td>@Html.LabelFor(model => model.ShippedDate)</td>
             <td>
-                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "datetime-local" })
+                @Html.TextBoxFor(model => model.ShippedDate, new { @type = "datetime-local"})
                 @Html.ValidationMessageFor(model => model.ShippedDate)
             </td>
             <td>@Html.LabelFor(model => model.ShipperId)</td>
@@ -137,7 +137,7 @@
             {
                 <tr>
                     <td>
-                        @Html.DropDownListFor(m => Model.OrderDetails[i].ProductId, (List<SelectListItem>)ViewBag.ProductCodeData, new { @class = "ProductId" })
+                        @Html.DropDownListFor(m => Model.OrderDetails[i].ProductId, new SelectList(ViewBag.ProductCodeData, "Value", "Text", Model.OrderDetails[i].ProductId), new { @class = "ProductId" })
                     </td>
                     <td>@Html.TextBoxFor(m => Model.OrderDetails[i].UnitPrice, new { @class = "UnitPrice" })</td>
                     <td>@Html.TextBoxFor(m => Model.OrderDetails[i].Qty, new { @class = "Qty" })</td>
@@ -153,6 +153,11 @@
 @section Scripts {
 
     <script type="text/javascript">
+        function ConvertDate(date) {
+            var match = date.match(/\d+/g)
+            console.log(match);
+        }
+
         var trtemplate = $('#tbContent tr').eq(0).html();
 
         //新增一列名資料
